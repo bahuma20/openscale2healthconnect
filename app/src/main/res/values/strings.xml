@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">openScale to Health Connect</string>
+    <string name="title_activity_permissions_rationale">PermissionsRationaleActivity</string>
+</resources>
