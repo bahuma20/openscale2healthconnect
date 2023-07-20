@@ -4,6 +4,9 @@ This android app allows you to sync your data
 from [OpenScale](https://github.com/oliexdev/openScale)
 to the Android [Health Connect](https://health.google/health-connect-android/) framework.
 
+** This app does currently not work because it is in review by Google and until then does not have
+access to HealthConnect **
+
 It works completely offline without any cloud dependencies or tracking. Your data stays on your
 device.
 
