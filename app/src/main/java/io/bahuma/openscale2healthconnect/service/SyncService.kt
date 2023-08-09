@@ -4,20 +4,26 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.work.Constraints
+import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import io.bahuma.openscale2healthconnect.AppViewModel
+import io.bahuma.openscale2healthconnect.PACKAGE_NAME_KEY
 import io.bahuma.openscale2healthconnect.SyncWorker
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 
-class SyncService(private val context: ComponentActivity, private val viewModel: AppViewModel) {
+class SyncService(
+    private val context: ComponentActivity,
+    private val viewModel: AppViewModel,
+    private val openScalePackageName: String
+) {
     private val tag = "SyncService"
 
     companion object {
-        val PREFERENCE_STORE = "OpenScaleToHealthConnectSyncService"
+        const val PREFERENCE_STORE = "OpenScaleToHealthConnectSyncService"
     }
 
 
@@ -29,6 +35,7 @@ class SyncService(private val context: ComponentActivity, private val viewModel:
             .build()
 
         val workRequest = PeriodicWorkRequestBuilder<SyncWorker>(2, TimeUnit.HOURS)
+            .setInputData(getWorkerData())
             .addTag("OPENSCALE_TO_HEALTHCONNECT_SYNC")
             .setConstraints(constraints)
             .build()
@@ -74,9 +81,18 @@ class SyncService(private val context: ComponentActivity, private val viewModel:
         Log.d(tag, "Setup sync worker")
 
         val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+            .setInputData(getWorkerData())
             .addTag("OPENSCALE_TO_HEALTHCONNECT_SYNC")
             .build()
 
         WorkManager.getInstance(context).enqueue(workRequest)
+    }
+
+    fun getWorkerData(): Data {
+        val data = Data.Builder()
+
+        data.putString(PACKAGE_NAME_KEY, openScalePackageName)
+
+        return data.build()
     }
 }

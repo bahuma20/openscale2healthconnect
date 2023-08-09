@@ -84,6 +84,9 @@ class MainActivity : ComponentActivity() {
             openScaleService.init()
 
             openScaleService.checkPermissionGranted()
+
+            syncService = SyncService(this, viewModel, packageName)
+            syncService.watchSyncWorkerState()
         } catch (e: PackageDetector.PackageNotFoundException) {
             Log.e("test", "Package not found")
             viewModel.setHealthConnectAvailable(false)
@@ -99,9 +102,6 @@ class MainActivity : ComponentActivity() {
                 healthConnectDataService.healthConnectClient = healthConnectClient
             }
         }
-
-        syncService = SyncService(this, viewModel)
-        syncService.watchSyncWorkerState()
 
         setContent {
             OpenScaleToHealthConnectTheme {

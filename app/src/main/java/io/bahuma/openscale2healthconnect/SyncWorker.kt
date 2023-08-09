@@ -11,10 +11,13 @@ import io.bahuma.openscale2healthconnect.service.OpenScaleDataService
 import io.bahuma.openscale2healthconnect.service.SyncService
 import java.time.Instant
 
+val PACKAGE_NAME_KEY = "packageName"
+
 class SyncWorker(private val appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {
     private val tag: String = "SyncWorker"
-    private val openScaleDataService = OpenScaleDataService(appContext, "com.health.openscale")
+    private val packageName = workerParams.inputData.getString(PACKAGE_NAME_KEY).orEmpty()
+    private val openScaleDataService = OpenScaleDataService(appContext, packageName)
     private val healthConnectDataService = HealthConnectDataService()
 
     override suspend fun doWork(): Result {
