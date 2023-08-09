@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.bahuma.openscale2healthconnect.component.HyperlinkText
 import io.bahuma.openscale2healthconnect.service.HealthConnectDataService
 import io.bahuma.openscale2healthconnect.service.HealthConnectService
 import io.bahuma.openscale2healthconnect.service.OpenScaleDataService
@@ -313,6 +314,21 @@ class MainActivity : ComponentActivity() {
                 )
 
                 Text("Enable Auto-Sync (Every 2 hours)")
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
+            ) {
+                HyperlinkText(
+                    fullText = "Privacy Policy",
+                    hyperLinks = mutableMapOf(
+                        "Privacy Policy" to "https://bahuma.io/privacy-openscale2healthconnect.php"
+                    ),
+                    linkTextColor = MaterialTheme.colorScheme.primary
+                )
             }
         }
 
