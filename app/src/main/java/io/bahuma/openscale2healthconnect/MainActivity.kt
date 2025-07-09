@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
@@ -21,6 +21,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
@@ -91,7 +92,7 @@ class MainActivity : ComponentActivity() {
 
             syncService = SyncService(this, viewModel, packageName)
             syncService.watchSyncWorkerState()
-        } catch (e: PackageDetector.PackageNotFoundException) {
+        } catch (_: PackageDetector.PackageNotFoundException) {
             Log.e("test", "Package not found")
             viewModel.setHealthConnectAvailable(false)
         }
@@ -205,7 +206,7 @@ class MainActivity : ComponentActivity() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    Icons.Rounded.ArrowForward,
+                    Icons.AutoMirrored.Rounded.ArrowForward,
                     contentDescription = "",
                     modifier = Modifier
                         .size(32.dp)
@@ -380,7 +381,7 @@ class MainActivity : ComponentActivity() {
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 modifier = Modifier
-                    .menuAnchor()
+                    .menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                     .fillMaxWidth()
             )
 
