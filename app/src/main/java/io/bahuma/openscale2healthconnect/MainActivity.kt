@@ -110,19 +110,13 @@ class MainActivity : ComponentActivity() {
             OpenScaleToHealthConnectTheme {
                 Scaffold { innerPadding ->
                     Surface(
-                        modifier = Modifier.consumeWindowInsets(innerPadding).padding(innerPadding),
-//                        contentPadding = innerPadding
+                        modifier = Modifier
+                            .consumeWindowInsets(innerPadding)
+                            .padding(innerPadding),
                     ) {
                         App()
                     }
                 }
-//                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-//                    App()
-//                }
             }
         }
     }
@@ -309,7 +303,9 @@ class MainActivity : ComponentActivity() {
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Switch(
                     checked = viewModel.syncEnabled.value,
@@ -324,7 +320,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.padding(end = 8.dp)
                 )
 
-                Text("Enable Auto-Sync (Every 2 hours)")
+                Text("Enable periodic sync")
             }
 
             Row(
