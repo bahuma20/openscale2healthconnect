@@ -45,7 +45,7 @@ class HealthConnectDataService() {
     }
 
     private fun buildMetadata(measurement: OpenScaleMeasurement, type: String): Metadata {
-        return Metadata(
+        return Metadata.unknownRecordingMethod(
             clientRecordId = measurement.id.toString() + "_" + type,
             clientRecordVersion = Instant.now().toEpochMilli()
         )
