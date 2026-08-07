@@ -1,5 +1,8 @@
 # OpenScale to Health Connect
 
+> [!WARNING]
+> This app is not developed further anymore. Please use the official [OpenScale Sync app](https://play.google.com/store/apps/details?id=com.health.openscale.sync.oss) app, as it now supports syncing to HealthConnect.
+
 This android app allows you to sync your data
 from [OpenScale](https://github.com/oliexdev/openScale)
 to the Android [Health Connect](https://health.google/health-connect-android/) framework.
