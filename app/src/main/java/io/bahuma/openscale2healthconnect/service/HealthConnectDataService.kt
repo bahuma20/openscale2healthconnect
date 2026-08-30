@@ -22,16 +22,27 @@ class HealthConnectDataService() {
 
         val records = mutableListOf<Record>()
 
-        measurements.forEach {
-            val weightRecord = buildWeightRecord(it)
-            records.add(weightRecord)
+        measurements.forEach { measurement ->
+            try {
+                buildWeightRecord(measurement).let { records.add(it) }
+            } catch (e: Exception) {
+                Log.w(tag, "Skipping weight record for measurement ${measurement.id}: ${e.message}")
+            }
 
-            val waterRecord = buildWaterRecord(it)
-            records.add(waterRecord)
+            try {
+                buildWaterRecord(measurement).let { records.add(it) }
+            } catch (e: Exception) {
+                Log.w(tag, "Skipping water record for measurement ${measurement.id}: ${e.message}")
+            }
 
-            val fatRecord = buildFatRecord(it)
-            records.add(fatRecord)
+            try {
+                buildFatRecord(measurement).let { records.add(it) }
+            } catch (e: Exception) {
+                Log.w(tag, "Skipping fat record for measurement ${measurement.id}: ${e.message}")
+            }
         }
+
+
 
         Log.d(tag, "Converted the ${measurements.size} measurements to ${records.size} records")
 
@@ -52,28 +63,40 @@ class HealthConnectDataService() {
     }
 
     private fun buildWeightRecord(measurement: OpenScaleMeasurement): WeightRecord {
+        val weight = measurement.weight.toDouble()
+        require(weight > 0) { "Weight must be positive, got: $weight" }
+
         return WeightRecord(
             time = measurement.dateTime.toInstant(),
             zoneOffset = null,
-            weight = Mass.kilograms(measurement.weight.toDouble()),
+            weight = Mass.kilograms(weight),
             metadata = buildMetadata(measurement, "weight")
         )
     }
 
     private fun buildWaterRecord(measurement: OpenScaleMeasurement): BodyWaterMassRecord {
+        val waterPercentage = measurement.water.toDouble()
+        val weight = measurement.weight.toDouble()
+
+        require(waterPercentage in 0.0..100.0) { "Water percentage must be between 0 and 100, got: $waterPercentage" }
+        require(weight > 0) { "Weight must be positive, got: $weight" }
+
         return BodyWaterMassRecord(
             time = measurement.dateTime.toInstant(),
             zoneOffset = null,
-            mass = Mass.kilograms(measurement.weight.toDouble() * measurement.water.toDouble() / 100),
+            mass = Mass.kilograms(weight * waterPercentage / 100),
             metadata = buildMetadata(measurement, "water")
         )
     }
 
     private fun buildFatRecord(measurement: OpenScaleMeasurement): BodyFatRecord {
+        val fatPercentage = measurement.fat.toDouble()
+        require(fatPercentage in 0.0..100.0) { "Fat percentage must be between 0 and 100, got: $fatPercentage" }
+
         return BodyFatRecord(
             time = measurement.dateTime.toInstant(),
             zoneOffset = null,
-            percentage = Percentage(measurement.fat.toDouble()),
+            percentage = Percentage(fatPercentage),
             metadata = buildMetadata(measurement, "fat")
         )
     }
